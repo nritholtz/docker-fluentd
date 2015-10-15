@@ -1,0 +1,47 @@
+{{range $key, $value := .}}
+  {{ $containerId := $value.ID }}
+  {{ $containerImage := $value.Image }}
+
+  <source>
+    type tail
+    format json
+    time_format %Y-%m-%dT%H:%M:%S 
+    path /var/lib/docker/containers/{{ $containerId }}/{{ $containerId }}-json.log
+    pos_file /var/lib/docker/containers/{{ $containerId }}/{{ $containerId }}-json.log.pos
+    tag docker.container.{{$containerId}}
+    refresh_interval 5
+  </source>
+
+  <filter docker.container.{{$containerId}}>
+    type record_transformer
+    <record>
+      container_image {{$containerImage}}
+      container_id  {{$containerId}}
+
+      {{/* Being used inside ECS */}}
+      {{ if contains $value.Labels "com.amazonaws.ecs.task-definition-family"}}
+        container_project {{ index $value.Labels "com.amazonaws.ecs.task-definition-family" }}
+        container_service {{ index $value.Labels "com.amazonaws.ecs.container-name" }}
+        task_definition_version {{ index $value.Labels "com.amazonaws.ecs.task-definition-version" }}
+      {{/* Being used inside Docker Compose */}}
+      {{ else }}
+        container_project {{ index $value.Labels "com.docker.compose.project" }}
+        container_service {{ index $value.Labels "com.docker.compose.service" }}
+      {{ end }}
+    </record>
+  </filter>
+
+  <match docker.container.{{$containerId}}>
+    type file
+    {{/* Being used inside ECS */}}
+    {{ if contains $value.Labels "com.amazonaws.ecs.task-definition-family"}}
+      path /var/log/docker/{{ index $value.Labels "com.amazonaws.ecs.task-definition-family" }}_{{ index $value.Labels "com.amazonaws.ecs.container-name" }}_{ index $value.Labels "com.amazonaws.ecs.task-definition-version" }}_{{$containerId}}.log
+    {{/* Being used inside Docker Compose */}}
+    {{ else }}
+       path /var/log/docker/{{ index $value.Labels "com.docker.compose.project" }}_{{ index $value.Labels "com.docker.compose.service" }}_{{$containerId}}.log
+    {{ end }}
+    format json
+    include_time_key true
+  </match>
+{{end}}
+
