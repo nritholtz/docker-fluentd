@@ -1,6 +1,6 @@
 # Docker-Fluentd: the Container to Log Other Containers' Logs
 
-On [Docker Hub](https://hub.docker.com/r/nritholtz/docker-fluentd)
+Hosted on [Docker Hub](https://hub.docker.com/r/nritholtz/docker-fluentd)
 
 ## What
 
