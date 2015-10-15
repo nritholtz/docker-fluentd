@@ -2,6 +2,10 @@
 
 Hosted on [Docker Hub](https://hub.docker.com/r/nritholtz/docker-fluentd)
 
+![Docker Stars](https://img.shields.io/docker/stars/nritholtz/docker-fluentd.svg)
+![Docker Pulls](https://img.shields.io/docker/pulls/nritholtz/docker-fluentd.svg)
+[![](https://badge.imagelayers.io/nritholtz/docker-fluentd:latest.svg)](https://imagelayers.io/?images=nritholtz/docker-fluentd:latest 'Get your own badge on imagelayers.io')
+
 ## What
 
 By running this container with the following command, one can aggregate the logs of Docker containers running on the same host:
