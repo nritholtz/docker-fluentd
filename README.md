@@ -1,5 +1,7 @@
 # Docker-Fluentd: the Container to Log Other Containers' Logs
 
+On [Docker Hub](https://hub.docker.com/r/nritholtz/docker-fluentd)
+
 ## What
 
 By running this container with the following command, one can aggregate the logs of Docker containers running on the same host:
