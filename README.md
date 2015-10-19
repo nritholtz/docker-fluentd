@@ -17,6 +17,7 @@ This container is extremely [ECS](https://aws.amazon.com/documentation/ecs/)-fri
 | AWS_ACCESS_KEY_ID | [AWS Access Key](http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html) (Optimally, you can  instead use [Instance Profiles](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html) |
 |  AWS_SECRET_ACCESS_KEY | [AWS Secret Access Key](http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html) (Optimally, you can instead use [Instance Profiles](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html) |
 
+
 ## What
 
 By running this container with the following command, one can aggregate the logs of Docker containers running on the same host:
