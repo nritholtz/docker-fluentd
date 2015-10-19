@@ -47,8 +47,8 @@
       log_group_name "{{ index $value.Labels "com.docker.compose.project" }}_#{ENV['LOG_ENVIRONMENT']}"
       log_stream_name {{ index $value.Labels "com.docker.compose.service" }}
     {{ else }}
-      log_group_name "ECS_HOST_#{ENV['LOG_ENVIRONMENT']}"
-      log_stream_name {{$containerImage}}
+      log_group_name "ecs_host_#{ENV['LOG_ENVIRONMENT']}"
+      log_stream_name {{ printf "%s/%s/%s" $value.Image.Registry $value.Image.Repository $value.Image.Tag }}
     {{ end }}
   </match>
 {{end}}
