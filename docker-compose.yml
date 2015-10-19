@@ -1,6 +1,10 @@
 # Used for testing purposes
 log:
   image: nritholtz/docker-fluentd
+  environment:
+    - DEBUG="true"
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
   volumes:
     - /var/lib/docker/containers:/var/lib/docker/containers
     - /var/run/docker.sock:/var/run/docker.sock:ro

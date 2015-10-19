@@ -1,6 +1,8 @@
 {{range $key, $value := .}}
   {{ $containerId := $value.ID }}
   {{ $containerImage := $value.Image }}
+  {{ $usingECS := contains $value.Labels "com.amazonaws.ecs.task-definition-family" }}
+  {{ $usingDockerCompose := contains $value.Labels "com.docker.compose.project" }}
 
   <source>
     type tail
@@ -10,6 +12,7 @@
     pos_file /var/lib/docker/containers/{{ $containerId }}/{{ $containerId }}-json.log.pos
     tag docker.container.{{$containerId}}
     refresh_interval 5
+    rotate_wait 5
   </source>
 
   <filter docker.container.{{$containerId}}>
@@ -17,31 +20,35 @@
     <record>
       container_image {{$containerImage}}
       container_id  {{$containerId}}
+      environment "#{ENV['LOG_ENVIRONMENT']}"
 
-      {{/* Being used inside ECS */}}
-      {{ if contains $value.Labels "com.amazonaws.ecs.task-definition-family"}}
+      {{ if $usingECS }}
         container_project {{ index $value.Labels "com.amazonaws.ecs.task-definition-family" }}
         container_service {{ index $value.Labels "com.amazonaws.ecs.container-name" }}
         task_definition_version {{ index $value.Labels "com.amazonaws.ecs.task-definition-version" }}
-      {{/* Being used inside Docker Compose */}}
-      {{ else }}
+
+      {{ else if $usingDockerCompose }}
         container_project {{ index $value.Labels "com.docker.compose.project" }}
         container_service {{ index $value.Labels "com.docker.compose.service" }}
+
+      {{ else }}
+        ip_address "#{ENV['IP_ADDRESS']}"
       {{ end }}
     </record>
   </filter>
 
   <match docker.container.{{$containerId}}>
-    type file
-    {{/* Being used inside ECS */}}
-    {{ if contains $value.Labels "com.amazonaws.ecs.task-definition-family"}}
-      path /var/log/docker/{{ index $value.Labels "com.amazonaws.ecs.task-definition-family" }}_{{ index $value.Labels "com.amazonaws.ecs.container-name" }}_{ index $value.Labels "com.amazonaws.ecs.task-definition-version" }}_{{$containerId}}.log
-    {{/* Being used inside Docker Compose */}}
+    type cloudwatch_logs
+    auto_create_stream true
+    {{ if $usingECS }}
+      log_group_name "{{ index $value.Labels "com.amazonaws.ecs.task-definition-family" }}_#{ENV['LOG_ENVIRONMENT']}"
+      log_stream_name {{ index $value.Labels "com.amazonaws.ecs.container-name" }}
+    {{ else if $usingDockerCompose }}
+      log_group_name "{{ index $value.Labels "com.docker.compose.project" }}_#{ENV['LOG_ENVIRONMENT']}"
+      log_stream_name {{ index $value.Labels "com.docker.compose.service" }}
     {{ else }}
-       path /var/log/docker/{{ index $value.Labels "com.docker.compose.project" }}_{{ index $value.Labels "com.docker.compose.service" }}_{{$containerId}}.log
+      log_group_name "ECS_HOST_#{ENV['LOG_ENVIRONMENT']}"
+      log_stream_name {{$containerImage}}
     {{ end }}
-    format json
-    include_time_key true
   </match>
 {{end}}
-
