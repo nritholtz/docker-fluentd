@@ -42,13 +42,13 @@
     auto_create_stream true
     {{ if $usingECS }}
       log_group_name "{{ index $value.Labels "com.amazonaws.ecs.task-definition-family" }}_#{ENV['LOG_ENVIRONMENT']}"
-      log_stream_name {{ index $value.Labels "com.amazonaws.ecs.container-name" }}
+      log_stream_name {{ index $value.Labels "com.amazonaws.ecs.container-name" }}_{{ $containerId }}
     {{ else if $usingDockerCompose }}
       log_group_name "{{ index $value.Labels "com.docker.compose.project" }}_#{ENV['LOG_ENVIRONMENT']}"
-      log_stream_name {{ index $value.Labels "com.docker.compose.service" }}
+      log_stream_name {{ index $value.Labels "com.docker.compose.service" }}_{{ $containerId }}
     {{ else }}
       log_group_name "ecs_host_#{ENV['LOG_ENVIRONMENT']}"
-      log_stream_name {{ printf "%s/%s/%s" $value.Image.Registry $value.Image.Repository $value.Image.Tag }}
+      log_stream_name {{ printf "%s/%s/%s" $value.Image.Registry $value.Image.Repository $value.Image.Tag }}_{{ $containerId }}
     {{ end }}
   </match>
 {{end}}
