@@ -35,11 +35,11 @@ The outputted entries looks exactly like Docker's JSON formatted logs, except it
 | ------------------------- |:---------------------------------------------------------:|
 | ECS                       | Log entries will use the running ECS [Task Definition](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_defintions.html)'s Family and container name for the `container_project` and `container_name` log fields, respectively. In addition, a field `task_definition_version` will be added to the entries as well.|
 | Docker Compose            | Log entries will use the running Docker [Compose](https://docs.docker.com/compose/)'s Project and Service for the `container_project` and `container_name` log fields, respectively. |
-| Default                   | If container does not fall within either of the previous categories, it will add a field to the log entry for the host's `ip_address`, that will only become populated correctly if you are running this container within an EC2 instance.
+| Default                   | If container does not fall within either of the previous categories, will not add either of the fields. 
 
 *Docker Compose example*
 ```console
-{"log":"2015-10-15T11:44:27Z 54 TID-gomn1ol8g Appworker/Worker/4cab697c-7e67-40ee-a443-b8f52a034183 INFO: completed in: 232.16888 ms\n","stream":"stdout","container_image":"app_web","container_id":"a8c0128c0b47d5a7a5ed702be3c5f57cd62dc73371d5d7743b63a49ac1e09074","container_project":"app","container_service":"worker","time":"2015-10-15T11:44:27+00:00"}
+{"log":"2015-10-15T11:44:27Z 54 TID-gomn1ol8g Appworker/Worker/4cab697c-7e67-40ee-a443-b8f52a034183 INFO: completed in: 232.16888 ms\n","stream":"stdout","container_image":"app_web","container_id":"a8c0128c0b47d5a7a5ed702be3c5f57cd62dc73371d5d7743b63a49ac1e09074","container_project":"app","container_service":"worker","time":"2015-10-15T11:44:27+00:00", "ip_address": "10.212.151.112"}
 ```
 
 ## How

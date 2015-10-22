@@ -21,7 +21,8 @@
       container_image {{$containerImage}}
       container_id  {{$containerId}}
       environment "#{ENV['LOG_ENVIRONMENT']}"
-
+      ip_address "#{ENV['IP_ADDRESS']}"
+      
       {{ if $usingECS }}
         container_project {{ index $value.Labels "com.amazonaws.ecs.task-definition-family" }}
         container_service {{ index $value.Labels "com.amazonaws.ecs.container-name" }}
@@ -31,8 +32,6 @@
         container_project {{ index $value.Labels "com.docker.compose.project" }}
         container_service {{ index $value.Labels "com.docker.compose.service" }}
 
-      {{ else }}
-        ip_address "#{ENV['IP_ADDRESS']}"
       {{ end }}
     </record>
   </filter>
