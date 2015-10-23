@@ -22,7 +22,7 @@
       container_id  {{$containerId}}
       environment "#{ENV['LOG_ENVIRONMENT']}"
       ip_address "#{ENV['IP_ADDRESS']}"
-      
+
       {{ if $usingECS }}
         container_project {{ index $value.Labels "com.amazonaws.ecs.task-definition-family" }}
         container_service {{ index $value.Labels "com.amazonaws.ecs.container-name" }}
@@ -39,6 +39,7 @@
   <match docker.container.{{$containerId}}>
     type cloudwatch_logs
     auto_create_stream true
+    include_time_key true
     {{ if $usingECS }}
       log_group_name "{{ index $value.Labels "com.amazonaws.ecs.task-definition-family" }}_#{ENV['LOG_ENVIRONMENT']}"
       log_stream_name {{ index $value.Labels "com.amazonaws.ecs.container-name" }}_{{ $containerId }}

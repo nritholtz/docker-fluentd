@@ -39,7 +39,7 @@ The outputted entries looks exactly like Docker's JSON formatted logs, except it
 
 *Docker Compose example*
 ```console
-{"log":"2015-10-15T11:44:27Z 54 TID-gomn1ol8g Appworker/Worker/4cab697c-7e67-40ee-a443-b8f52a034183 INFO: completed in: 232.16888 ms\n","stream":"stdout","container_image":"app_web","container_id":"a8c0128c0b47d5a7a5ed702be3c5f57cd62dc73371d5d7743b63a49ac1e09074","container_project":"app","container_service":"worker","time":"2015-10-15T11:44:27+00:00", "ip_address": "10.212.151.112"}
+{"log":"2015-10-15T11:44:27Z 54 TID-gomn1ol8g Appworker/Worker/4cab697c-7e67-40ee-a443-b8f52a034183 INFO: completed in: 232.16888 ms\n","stream":"stdout","container_image":"app_web","container_id":"a8c0128c0b47d5a7a5ed702be3c5f57cd62dc73371d5d7743b63a49ac1e09074","container_project":"app","container_service":"worker","time": "2015-10-23T13:00:42Z","ip_address": "10.212.151.112"}
 ```
 
 ## How

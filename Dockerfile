@@ -28,7 +28,7 @@ RUN git clone https://github.com/tagomoris/xbuild.git /.xbuild && \
 # Install Fluentd
 ENV PATH /ruby/bin:$PATH
 RUN gem install fluentd -v 0.12.16 --no-rdoc --no-ri && \
-  fluent-gem install fluent-plugin-cloudwatch-logs
+  fluent-gem install fluent-plugin-cloudwatch-logs -v 0.1.2 
 
 # Install docker-gen
 RUN wget https://github.com/jwilder/docker-gen/releases/download/0.4.2/docker-gen-linux-amd64-0.4.2.tar.gz \
