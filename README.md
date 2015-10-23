@@ -23,7 +23,7 @@ This container is extremely [ECS](https://aws.amazon.com/documentation/ecs/)-fri
 By running this container with the following command, one can aggregate the logs of Docker containers running on the same host:
 
 ```console
-docker run -d -e "LOG_ENVIRONMENT=qa" -v /var/lib/docker/containers:/var/lib/docker/containers -v /var/run/docker.sock:/var/run/docker.sock:ro --name=fluentd nritholtz/docker-fluentd
+docker run -d --restart=always -e "LOG_ENVIRONMENT=qa" -v /var/lib/docker/containers:/var/lib/docker/containers -v /var/run/docker.sock:/var/run/docker.sock:ro --name=fluentd nritholtz/docker-fluentd
 ```
 The container logs will forwarded to [CloudWatch](https://aws.amazon.com/documentation/cloudwatch/), with the `log_group_name` as the Task definition's family, followed by the set `LOG_ENVIRONMENT` environment variable. The `log_stream_name` will be the ECS container's name, followed by the container's ID (this is necessary due to issues with having more than 1 source for a single log_stream, e.g. [the stored sequence parameter](https://github.com/ryotarai/fluent-plugin-cloudwatch-logs/pull/11)).
 
